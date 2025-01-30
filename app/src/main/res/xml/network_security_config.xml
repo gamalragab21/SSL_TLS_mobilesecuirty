@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config>
+        <domain includeSubdomains="true">badssl.com</domain>
+        <trust-anchors>
+            <certificates src="@raw/my_cert2"/>
+        </trust-anchors>
+<!--        <pin-set>-->
+<!--            &lt;!&ndash; Pin for the SSL/TLS certificate of example.com &ndash;&gt;-->
+<!--            <pin digest="SHA-256">9b08d1ac5a8017174a538026c91169ab036e9a971fe85fd4388304f8b9f2b3e3</pin>-->
+
+<!--        </pin-set>-->
+    </domain-config>
+</network-security-config>
