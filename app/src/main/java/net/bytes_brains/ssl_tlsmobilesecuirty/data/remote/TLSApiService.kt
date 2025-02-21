@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface TLSApiService {
 
-    @GET("tls-test")
+    @GET("/")
     suspend fun getNews(): ResponseBody
 }

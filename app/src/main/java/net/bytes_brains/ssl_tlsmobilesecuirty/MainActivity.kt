@@ -27,11 +27,15 @@ class MainActivity : AppCompatActivity() {
     private fun invokeTLSApiWithRetrofitProvider() {
         val retrofitProvider = RetrofitProvider()
 
+
         val api = retrofitProvider.initApiService(this)
         lifecycleScope.launch {
-            Log.e("API RESULT", "invokeTLSApiWithRetrofitProvider: ${api.getNews()}")
-        }.invokeOnCompletion {
-            Log.e("TAG", "invokeTLSApiWithRetrofitProvider: ERROR occured= ${it?.message}"  )
+            try {
+                Log.e("API RESULT", "invokeTLSApiWithRetrofitProvider: ${api.getNews()}")
+            } catch (e: Exception) {
+                Log.e("TAG", "invokeTLSApiWithRetrofitProvider: ERROR occurred= ${e.message}")
+                e.printStackTrace()
+            }
         }
     }
 }
