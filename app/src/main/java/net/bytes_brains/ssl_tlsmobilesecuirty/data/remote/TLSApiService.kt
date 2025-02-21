@@ -6,5 +6,5 @@ import retrofit2.http.GET
 interface TLSApiService {
 
     @GET("/")
-    suspend fun getNews(): ResponseBody
+    suspend fun invokeAlpahBill(): ResponseBody
 }

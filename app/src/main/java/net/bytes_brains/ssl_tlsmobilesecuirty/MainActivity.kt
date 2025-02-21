@@ -31,11 +31,15 @@ class MainActivity : AppCompatActivity() {
         val api = retrofitProvider.initApiService(this)
         lifecycleScope.launch {
             try {
-                Log.e("API RESULT", "invokeTLSApiWithRetrofitProvider: ${api.getNews()}")
+                Log.e(TLS_TAG, "invokeTLSApiWithRetrofitProvider: ${api.invokeAlpahBill()}")
             } catch (e: Exception) {
-                Log.e("TAG", "invokeTLSApiWithRetrofitProvider: ERROR occurred= ${e.message}")
+                Log.e(TLS_TAG, "invokeTLSApiWithRetrofitProvider: ERROR occurred= ${e.message}")
                 e.printStackTrace()
             }
         }
+    }
+
+    companion object{
+        const val TLS_TAG="TLS_RESULT"
     }
 }

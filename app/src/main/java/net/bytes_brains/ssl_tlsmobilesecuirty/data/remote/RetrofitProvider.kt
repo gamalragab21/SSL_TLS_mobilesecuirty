@@ -1,7 +1,6 @@
 package net.bytes_brains.ssl_tlsmobilesecuirty.data.remote
 
 import android.content.Context
-import android.util.Log
 import net.bytes_brains.ssl_tlsmobilesecuirty.data.utils.Const
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
@@ -32,19 +31,23 @@ class RetrofitProvider {
         }
     }
 
+    private fun createCertificatePinning(): CertificatePinner {
+        return CertificatePinner.Builder()
+            .add("alphabill.org", "sha256/g8XL/6X37eu0/q09TCQovj9kFaHebuoGYLsAi8Xurjw=")
+            .build()
+    }
+
+
     private fun buildOkHttp(context: Context): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(createLoggingInterceptor())
-//            .addSSLSocketFactoryForPreInit(context,true)
-//            .certificatePinner(certificatePinner)
-
-//            .certificatePinner(addingCertificatePinning())
+            .addSSLSocketFactory(context)
+//            .certificatePinner(createCertificatePinning())
             .build()
     }
 
     private fun OkHttpClient.Builder.addSSLSocketFactory(
-        context: Context,
-        isSSlPinningEnabled: Boolean
+        context: Context
     ) = apply {
         val certificateFactory = CertificateFactory.getInstance("X.509")
         val keyStore = KeyStore.getInstance(KeyStore.getDefaultType()).apply {
@@ -75,11 +78,7 @@ class RetrofitProvider {
         val trustManagerFactory = TrustManagerFactory.getInstance(
             TrustManagerFactory.getDefaultAlgorithm()
         ).apply {
-            if (isSSlPinningEnabled) {
-                init(keyStore)
-            } else {
-                init(null as KeyStore?)
-            }
+            init(keyStore)
         }
         val trustManager = trustManagerFactory.trustManagers[0] as X509TrustManager
 
@@ -90,10 +89,6 @@ class RetrofitProvider {
         sslSocketFactory(sslContext.socketFactory, trustManager)
     }
 
-    private val certificatePinner = CertificatePinner.Builder()
-        .add("alphabill.org", "sha256/g8XL/6X37eu0/q09TCQovj9kFaHebuoGYLsAi8Xurjw=") // Replace with actual SHA256 fingerprint
-        .build()
-
     private fun createLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY // Log the request and response body
@@ -102,13 +97,6 @@ class RetrofitProvider {
 
     fun initApiService(context: Context): TLSApiService {
         return getInstance(context).create(TLSApiService::class.java)
-    }
-
-
-    companion object {
-        fun toLog(message: String? = null) {
-            Log.e(RetrofitProvider.javaClass.name, "toLog: message= $message")
-        }
     }
 
 }
